@@ -6,11 +6,11 @@ on:
     tags: ["v*.*.*"]
     paths:
       - "carts/**"
-      - ".github/workflows/carts.yml"
+      #  - ".github/workflows/carts.yml"
   pull_request:
     paths:
       - "carts/**"
-      - ".github/workflows/carts.yml"
+      # - ".github/workflows/carts.yml"
 
 env:
   REGISTRY: ghcr.io
