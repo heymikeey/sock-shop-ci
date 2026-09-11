@@ -3,7 +3,7 @@ name: Carts CI
 on:
   push:
     branches: [master, main]
-    tags: ["carts-v*.*.*"]
+    tags: ["v*.*.*"]
     paths:
       - "carts/**"
       - ".github/workflows/carts.yml"
@@ -58,9 +58,9 @@ jobs:
             type=sha,format=short
             type=ref,event=branch
             type=raw,value=latest,enable={{is_default_branch}}
-            type=semver,pattern=carts-v{{version}}
-            type=semver,pattern=carts-v{{major}}.{{minor}}
-            type=semver,pattern=carts-v{{major}}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
 
       - name: Build and push image
         uses: docker/build-push-action@v6
