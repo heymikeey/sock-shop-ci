@@ -1,23 +1,21 @@
-name: Carts CI
+name: User CI
 
 on:
   push:
     branches: [master, main]
-    tags: ["carts-v*.*.*"]
+    tags: ["user-v*.*.*"]
     paths:
-      - "carts/**"
-      #  - ".github/workflows/carts.yml"
+      - "user/**"
   pull_request:
     paths:
-      - "carts/**"
-      # - ".github/workflows/carts.yml"
+      - "user/**"
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/carts
+  IMAGE_NAME: ${{ github.repository_owner }}/user
 
 concurrency:
-  group: carts-ci-${{ github.ref }}
+  group: user-ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -30,17 +28,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "11"
-          cache: maven
-
-      - name: Build with Maven
-        working-directory: carts
-        run: mvn -q -DskipTests package
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -62,13 +49,13 @@ jobs:
             type=sha,format=short
             type=ref,event=branch
             type=raw,value=latest,enable={{is_default_branch}}
-            type=match,pattern=carts-v(\d+\.\d+\.\d+.*),group=1
+            type=match,pattern=user-v(\d+\.\d+\.\d+.*),group=1
 
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
-          context: carts
-          file: carts/Dockerfile
+          context: user
+          file: user/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

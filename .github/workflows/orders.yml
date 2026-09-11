@@ -1,23 +1,21 @@
-name: Carts CI
+name: Orders CI
 
 on:
   push:
     branches: [master, main]
-    tags: ["carts-v*.*.*"]
+    tags: ["orders-v*.*.*"]
     paths:
-      - "carts/**"
-      #  - ".github/workflows/carts.yml"
+      - "orders/**"
   pull_request:
     paths:
-      - "carts/**"
-      # - ".github/workflows/carts.yml"
+      - "orders/**"
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/carts
+  IMAGE_NAME: ${{ github.repository_owner }}/orders
 
 concurrency:
-  group: carts-ci-${{ github.ref }}
+  group: orders-ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -39,7 +37,7 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        working-directory: carts
+        working-directory: orders
         run: mvn -q -DskipTests package
 
       - name: Set up Docker Buildx
@@ -62,13 +60,13 @@ jobs:
             type=sha,format=short
             type=ref,event=branch
             type=raw,value=latest,enable={{is_default_branch}}
-            type=match,pattern=carts-v(\d+\.\d+\.\d+.*),group=1
+            type=match,pattern=orders-v(\d+\.\d+\.\d+.*),group=1
 
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
-          context: carts
-          file: carts/Dockerfile
+          context: orders
+          file: orders/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
