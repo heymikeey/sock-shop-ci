@@ -1,4 +1,4 @@
-FROM java:openjdk-8-alpine
+FROM eclipse-temurin:8-jre-alpine
 
 WORKDIR /usr/src/app
 COPY ./target/*.jar ./app.jar
