@@ -70,6 +70,15 @@ npm start
 
 Each service historically shipped its own Travis CI (`.travis.yml`) configuration for building, testing, and publishing Docker images independently. This repository consolidates those services to support experimenting with unified, repo-wide CI/CD pipelines across the whole application.
 
+Services are being migrated one at a time from Travis CI to GitHub Actions:
+
+| Service | CI |
+|---|---|
+| `carts` | [GitHub Actions](./.github/workflows/carts.yml) — builds with Maven and pushes the Docker image to GitHub Container Registry (GHCR) |
+| all others | Travis CI (`.travis.yml`, legacy) |
+
+The `carts` workflow (`.github/workflows/carts.yml`) triggers on pushes/PRs touching `carts/**`, builds the service with Maven, then builds and pushes a Docker image to `ghcr.io/<owner>/carts` (tagged by commit SHA, branch, and `latest` on the default branch) using the built-in `GITHUB_TOKEN` — no additional secrets required.
+
 ## License
 
 Each service directory retains its original upstream `LICENSE` (Apache 2.0), inherited from the [microservices-demo](https://github.com/microservices-demo/microservices-demo) project by Weaveworks.
